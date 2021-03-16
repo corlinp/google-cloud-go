@@ -318,6 +318,19 @@ func newDocumentSnapshot(ref *DocumentRef, proto *pb.Document, c *Client, readTi
 	return d, nil
 }
 
+// GenerateNewDocumentSnapshot generates a new document from a protobuf Document
+func (c *Client) GenerateNewDocumentSnapshot(proto *pb.Document) (*DocumentSnapshot, error) {
+	docRef, err := pathToDoc(proto.Name, c)
+	if err != nil {
+		return nil, err
+	}
+	doc, err := newDocumentSnapshot(docRef, proto, c, proto.UpdateTime)
+	if err != nil {
+		return nil, err
+	}
+	return doc, nil
+}
+
 func serverTimestamp(path string) *pb.DocumentTransform_FieldTransform {
 	return &pb.DocumentTransform_FieldTransform{
 		FieldPath: path,
